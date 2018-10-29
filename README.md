@@ -1,3 +1,12 @@
+<p align="center">
+    <a href="http://www.serendipityhq.com" target="_blank">
+        <img src="http://www.serendipityhq.com/wp-content/uploads/2018/07/Logo-Serendipity-HQ.png">
+    </a>
+</p>
+
+STRIPE BUNDLE
+=============
+
 [![Latest Stable Version](https://poser.pugx.org/serendipity_hq/stripe-bundle/v/stable.png)](https://packagist.org/packages/serendipity_hq/stripe-bundle)
 [![Build Status](https://travis-ci.org/Aerendir/stripe-bundle.svg?branch=master)](https://travis-ci.org/Aerendir/stripe-bundle)
 [![Total Downloads](https://poser.pugx.org/serendipity_hq/stripe-bundle/downloads.svg)](https://packagist.org/packages/serendipity_hq/stripe-bundle)
@@ -5,15 +14,13 @@
 [![Code Climate](https://codeclimate.com/github/Aerendir/stripe-bundle/badges/gpa.svg)](https://codeclimate.com/github/Aerendir/stripe-bundle)
 [![Test Coverage](https://codeclimate.com/github/Aerendir/stripe-bundle/badges/coverage.svg)](https://codeclimate.com/github/Aerendir/stripe-bundle)
 [![Issue Count](https://codeclimate.com/github/Aerendir/stripe-bundle/badges/issue_count.svg)](https://codeclimate.com/github/Aerendir/stripe-bundle)
-[![StyleCI](https://styleci.io/repos/69582513/shield)](https://styleci.io/repos/69582513)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/d8fc2a44-436e-43f5-8205-16fc77cfc1b8/mini.png)](https://insight.sensiolabs.com/projects/d8fc2a44-436e-43f5-8205-16fc77cfc1b8)
-
-STRIPE BUNDLE
-=============
 
 SerendipityHQ Stripe Bundle integrates your Symfony 2 app with the Stripe payment service.
 
 SerendipityHQ Stripe Bundle gives you the ability to perform common tasks calling the Stripe's API and exposes an endpoint to which you can receive the notifications sent by Stripe via Webhooks.
+
+*Do you like this bundle? [**Leave a &#9733;**](#js-repo-pjax-container) or run `composer global require symfony/thanks && composer thanks` to say thank you to all libraries you use in your current project, this one too!*
 
 How to use the Serendipity HQ Stripe Bundle
 -------------------------------------------
@@ -32,7 +39,7 @@ See the documentation for the full list of features.
 Requirements
 ------------
 
-1. PHP ^7.0
+1. PHP ^7.1
 
 Status: ACTIVE DEVELOPMENT
 --------------------------
@@ -52,4 +59,4 @@ Thank you for your collaboration.
 DOCUMENTATION
 =============
 
-You can read how to install, configure, test and use the SerendipityHQ Stripe Bundle in the [documentation](Resources/docs/Index.md).
+You can read how to install, configure, test and use the SerendipityHQ Stripe Bundle in the [documentation](docs/Index.md).

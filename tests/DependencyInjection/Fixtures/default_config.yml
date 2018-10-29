@@ -1,0 +1,8 @@
+parameters:
+    kernel.debug: true
+    kernel.environment: 'dev'
+shq_stripe:
+    debug: false
+    stripe_config:
+        secret_key: "secret"
+        publishable_key: "publishable"
