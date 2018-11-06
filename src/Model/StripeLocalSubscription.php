@@ -421,6 +421,16 @@ class StripeLocalSubscription implements StripeLocalResourceInterface
     }
 
     /**
+     * @param float $taxPercent
+     */
+    public function setTaxPercent($taxPercent)
+    {
+        $this->taxPercent = $taxPercent;
+
+        return $this;
+    }
+
+    /**
      * Transforms metadata from string to array.
      *
      * As metadata can be set by the developer or by reflection during syncronization of the StripeCustomer object with
