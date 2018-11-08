@@ -524,4 +524,11 @@ class StripeLocalCharge implements StripeLocalResourceInterface
 
         return $return;
     }
+
+    /**
+     * String representing the entity
+     */
+    public function __toString() : string {
+        return $this->id;
+    }
 }

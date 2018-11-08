@@ -493,4 +493,14 @@ class StripeLocalCard implements StripeLocalResourceInterface
     {
         return (string) $this->getId();
     }
+
+    /**
+     * Returns a human representation of a card.
+     * 
+     * @return string
+     */
+    public function getFormattedLast4Digits() : string
+    {
+        return '**** **** ** ******' . $this->last4;
+    }
 }
