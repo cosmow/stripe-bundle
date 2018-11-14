@@ -503,4 +503,8 @@ class StripeLocalCard implements StripeLocalResourceInterface
     {
         return '**** **** ** ******' . $this->last4;
     }
+
+    public function getAllInfo() {
+        return sprintf("%s %s (%d/%d)", $this->getBrand(), $this->getFormattedLast4Digits(), $this->getExpMonth(), $this->getExpYear());
+    }
 }
