@@ -594,4 +594,13 @@ class StripeLocalSubscription implements StripeLocalResourceInterface
 
         return $return;
     }
+
+    /**
+     * Default object toString funcion
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->id;
+    }
 }
