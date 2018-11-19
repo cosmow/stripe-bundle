@@ -189,6 +189,14 @@ class StripeLocalSubscription implements StripeLocalResourceInterface
     private $trialStart;
 
     /**
+     * @var int
+     * 
+     * Helper var in order to count payment errors
+     * 
+     */
+    private $paymentErrors;
+
+    /**
      * @return int
      */
     public function getId()
@@ -571,10 +579,13 @@ class StripeLocalSubscription implements StripeLocalResourceInterface
              * @see https://stripe.com/docs/api#create_subscription-trial_period_days
              *
              */
+            if($this->getTrialStart()) {
+                $return['trial_start'] = $this->getTrialStart()->format("U");
+            }
 
             if (null !== $this->getTrialEnd()) {
-                $return['trial_end']         = $this->getTrialEnd();
-                $return['trial_period_days'] = $this->getTrialEnd()->diff($this->getTrialStart())->format('%a') + 1;
+                $return['trial_end']         = time() + 5;
+                //$return['trial_period_days'] = $this->getTrialEnd()->diff($this->getTrialStart())->format('%a') + 1;
             }
         } elseif ('cancel' === $action) { // Prepare the array for cancelation
             $return = [];
@@ -626,5 +637,25 @@ class StripeLocalSubscription implements StripeLocalResourceInterface
         $this->trialEnd = $trialEnd;
 
         return $this;
+    }
+
+    /**
+     * @access public
+     * @param integer $paymentErrors
+     * @return StripeLocalSubscription
+     */
+    public function setPaymentErrors(int $paymentErrors)
+    {
+        $this->paymentErrors = $paymentErrors;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getPaymentErrors()
+    {
+        return $this->paymentErrors;
     }
 }
