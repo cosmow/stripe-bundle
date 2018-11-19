@@ -603,4 +603,28 @@ class StripeLocalSubscription implements StripeLocalResourceInterface
     {
         return $this->id;
     }
+
+    /**
+     * @access public
+     * @param DateTime $trialStart
+     * @return StripeLocalSubscription
+     */
+    public function setTrialStart(\DateTime $trialStart)
+    {
+        $this->trialStart = $trialStart;
+
+        return $this;
+    }   
+
+    /**
+     * @access public
+     * @param DateTime $trialEnd
+     * @return StripeLocalSubscription
+     */
+    public function setTrialEnd(\DateTime $trialEnd)
+    {
+        $this->trialEnd = $trialEnd;
+
+        return $this;
+    }
 }
