@@ -584,7 +584,7 @@ class StripeLocalSubscription implements StripeLocalResourceInterface
             }
 
             if (null !== $this->getTrialEnd()) {
-                $return['trial_end']         = time() + 5;
+                $return['trial_end']         = $this->getTrialEnd()->format("U");
                 //$return['trial_period_days'] = $this->getTrialEnd()->diff($this->getTrialStart())->format('%a') + 1;
             }
         } elseif ('cancel' === $action) { // Prepare the array for cancelation
