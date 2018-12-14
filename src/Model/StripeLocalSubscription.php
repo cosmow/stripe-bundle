@@ -194,7 +194,7 @@ class StripeLocalSubscription implements StripeLocalResourceInterface
      * Helper var in order to count payment errors
      * 
      */
-    private $paymentErrors;
+    private $paymentErrors = 0;
 
     /**
      * @return int
