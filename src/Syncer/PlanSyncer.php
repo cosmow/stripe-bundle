@@ -58,7 +58,7 @@ class PlanSyncer extends AbstractSyncer
                     break;
 
                 case 'amount':
-                    $reflectedProperty->setValue($localResource, new Money(['amount' => $stripeResource->amount, 'currency' => $stripeResource->currency]));
+                    $reflectedProperty->setValue($localResource, new Money(['humanAmount' => $stripeResource->amount, 'currency' => $stripeResource->currency]));
                     break;
 
                 case 'created':

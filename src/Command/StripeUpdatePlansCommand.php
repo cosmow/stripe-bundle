@@ -18,11 +18,10 @@ namespace SerendipityHQ\Bundle\StripeBundle\Command;
 use Doctrine\Bundle\DoctrineBundle\Command\DoctrineCommand;
 use SerendipityHQ\Bundle\StripeBundle\Event\StripePlanUpdateEvent;
 use SerendipityHQ\Bundle\StripeBundle\Model\StripeLocalPlan;
-use SerendipityHQ\Component\ValueObjects\Currency\Currency;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
+use \SerendipityHQ\Component\ValueObjects\Money\Money;
 class StripeUpdatePlansCommand extends DoctrineCommand
 {
     protected function configure()
@@ -43,6 +42,7 @@ class StripeUpdatePlansCommand extends DoctrineCommand
 
         $stripeManager = $this->getContainer()->get('stripe_bundle.manager.stripe_api');
         $stripePlans   = $stripeManager->retrievePlans();
+        //var_dump($stripePlans);die;
         foreach ($stripePlans['data'] as $plan) {
             $aPlan = $plan->__toArray();
 
@@ -54,11 +54,11 @@ class StripeUpdatePlansCommand extends DoctrineCommand
                 $stripeLocalPlan->setId($aPlan['id']);
                 $stripeLocalPlan->setCreated(new \DateTime());
             }
-            $amount   = new \SerendipityHQ\Component\ValueObjects\Money\Money(['amount' => $aPlan['amount'], 'currency' => $aPlan['currency']]);
-            $currency = new Currency($aPlan['currency']);
+            
+            $amount = new Money(['baseAmount' => $aPlan['amount'], 'currency' => $aPlan['currency']]);
             $stripeLocalPlan->setObject('plan')
                 ->setAmount($amount)
-                ->setCurrency($currency)
+                ->setCurrency($aPlan['currency'])
                 ->setInterval($aPlan['interval'])
                 ->setIntervalCount($aPlan['interval_count'])
                 ->setLivemode($aPlan['livemode'])
