@@ -51,7 +51,7 @@ class WebhookController extends Controller
             }
             $syncer = $this->get('stripe_bundle.syncer.' . strtolower($objectType));
             if (method_exists($syncer, 'removeLocal')) {
-                $this->get('stripe_bundle.syncer.' . $objectType)->removeLocal($localResource, $stripeWebhookEvent);
+                $syncer->removeLocal($localResource, $stripeWebhookEvent);
             }
 
             return new Response('ok', 200);
