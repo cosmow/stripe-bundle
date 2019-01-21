@@ -69,4 +69,13 @@ class StripeWebhookInvoiceEventEvent extends AbstractStripeWebhookEventEvent
      * @see https://stripe.com/docs/api#event_types-invoice.updated
      */
     const UPDATED = 'stripe.webhook.invoice.updated';
+
+    /**
+     * Occurs whenever an invoice finalizes 
+     *
+     * @var string
+     *
+     * @see https://stripe.com/docs/api#event_types-invoice.finalized
+     */
+    const FINALIZED = 'stripe.webhook.invoice.finalized';
 }
