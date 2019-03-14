@@ -405,6 +405,14 @@ class StripeManager
      */
     public function cancelSubscription(StripeLocalSubscription $localSubscription)
     {
+        $localSubscription->setCancelAtPeriodEnd(true);
+        $params = $localSubscription->toStripe('cancel');
+
+        $arguments = [   
+            'params'  => $params,
+            'options' => [],
+        ];
+
         // Get the stripe object
         $stripeSubscription = $this->retrieveSubscription($localSubscription);
 
@@ -414,7 +422,7 @@ class StripeManager
         }
 
         // Save the subscription object
-        $stripeSubscription = $this->callStripeObject($stripeSubscription, 'cancel');
+        $stripeSubscription = $this->callStripeObject($stripeSubscription, 'cancel', $arguments);
 
         // If the update failed, return false
         if (false === $stripeSubscription) {
@@ -646,6 +654,54 @@ class StripeManager
 
         if (true === $syncSources) {
             $this->planSyncer->syncLocalSources($localPlan, $stripePlan);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param StripeSubscriber $localPlan
+     * @param bool            $syncSources
+     *
+     * @return bool
+     */
+    public function updateSubscription(StripeLocalSubscription $localSubscription, $syncSources)
+    {
+
+        $localSubscription->setCancelAtPeriodEnd(false);
+        // Get the stripe object
+        $stripeSubscription = $this->retrieveSubscription($localSubscription);
+
+        // The retrieving failed: return false
+        if (false === $stripeSubscription) {
+            return false;
+        }
+
+        $params = $localSubscription->toStripe('update');
+
+        $arguments = [
+            'id'      => $localSubscription->getId(),
+            'params'  => $params,
+            'options' => [],
+        ];
+          
+        // Update the stripe object with info set in the local object
+        //$this->subscriptionSyncer->syncStripeFromLocal($stripeSubscription, $localSubscription);
+   
+       
+        // Save the plan object
+        $stripeSubscription = $this->callStripeApi(Subscription::class, 'update', $arguments);
+
+        // If the update failed, return false
+        if (false === $stripeSubscription) {
+            return false;
+        }
+
+        // Set the data returned by Stripe in the LocalPlan object
+        //$this->subscriptionSyncer->syncLocalFromStripe($localSubscription, $stripeSubscription);
+
+        if (true === $syncSources) {
+           // $this->subscriptionSyncer->syncLocalSources($localSubscription, $stripeSubscription);
         }
 
         return true;
