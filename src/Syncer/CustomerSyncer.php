@@ -183,7 +183,7 @@ class CustomerSyncer extends AbstractSyncer
         }
 
         if (null !== $localResource->getNewSource()) {
-            $stripeResource->source = $localResource->getNewSource();
+            $stripeResource->payment_method = $localResource->getNewSource();
         }
 
         if (null !== $localResource->getDescription()) {

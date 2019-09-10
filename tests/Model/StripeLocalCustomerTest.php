@@ -103,7 +103,7 @@ class StripeLocalCustomerTest extends ModelTestCase
             'description'     => $expected['description'],
             'email'           => 'test@example.com',
             'metadata'        => $expected['metadata'],
-            'source'          => $expected['source'],
+            'payment_method'  => $expected['source'],
         ];
         $this::assertSame($expectedToStripeCreate, $resource->toStripe('create'));
     }
