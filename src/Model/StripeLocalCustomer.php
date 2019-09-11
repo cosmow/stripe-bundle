@@ -372,7 +372,10 @@ class StripeLocalCustomer implements StripeLocalResourceInterface
         }
 
         if (null !== $this->getNewSource() && 'create' === $action) {
-            $return['source'] = $this->getNewSource();
+            $return['payment_method'] = $this->getNewSource();
+            $return['invoice_settings'] = [
+                'default_payment_method' => $this->getNewSource()
+            ];
         }
 
         return $return;
