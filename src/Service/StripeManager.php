@@ -92,6 +92,7 @@ class StripeManager
     public function __construct($secretKey, $debug, $statementDescriptor, LoggerInterface $logger = null, ChargeSyncer $chargeSyncer, SubscriptionSyncer $subscriptionSyncer, PlanSyncer $planSyncer, CustomerSyncer $customerSyncer, WebhookEventSyncer $webhookEventSyncer)
     {
         Stripe::setApiKey($secretKey);
+        Stripe::setApiVersion("2019-09-09");
         $this->debug               = $debug;
         $this->statementDescriptor = $statementDescriptor;
         $this->logger              = $logger instanceof Logger ? $logger->withName('SHQStripeBundle') : $logger;
