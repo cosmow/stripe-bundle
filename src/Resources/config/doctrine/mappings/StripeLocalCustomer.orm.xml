@@ -17,7 +17,11 @@
         <one-to-one target-entity="SerendipityHQ\Bundle\StripeBundle\Model\StripeLocalCard" field="defaultSource">
             <join-column name="default_source" referenced-column-name="id" nullable="true" on-delete="SET NULL" />
         </one-to-one>
+        <one-to-one target-entity="SerendipityHQ\Bundle\StripeBundle\Model\StripeLocalPaymentMethod" field="defaultPaymentMethod">
+            <join-column name="default_method" referenced-column-name="id" nullable="true" on-delete="SET NULL" />
+        </one-to-one>
         <one-to-many target-entity="SerendipityHQ\Bundle\StripeBundle\Model\StripeLocalCard" mapped-by="customer" field="cards" />
+        <one-to-many target-entity="SerendipityHQ\Bundle\StripeBundle\Model\StripeLocalPaymentMethod" mapped-by="customer" field="paymentMethods" />
         <one-to-many target-entity="SerendipityHQ\Bundle\StripeBundle\Model\StripeLocalCharge" mapped-by="customer" field="charges" />
         <one-to-many target-entity="SerendipityHQ\Bundle\StripeBundle\Model\StripeLocalSubscription" mapped-by="customer" field="subscriptions" />
         <lifecycle-callbacks>

@@ -40,14 +40,14 @@ class CustomerSyncer extends AbstractSyncer
     {
         /** @var StripeLocalCustomer $localResource */
         if ( ! $localResource instanceof StripeLocalCustomer) {
-            throw new \InvalidArgumentException('CustomerSyncer::syncLocalFromStripe() accepts only StripeLocalCustoer objects as first parameter.');
+            throw new \InvalidArgumentException('CustomerSyncer::syncLocalFromStripe() accepts only StripeLocalCustomer objects as first parameter.');
         }
 
         /** @var Customer $stripeResource */
         if ( ! $stripeResource instanceof Customer) {
             throw new \InvalidArgumentException('CustomerSyncer::syncLocalFromStripe() accepts only Stripe\Customer objects as second parameter.');
         }
-
+        
         $reflect = new \ReflectionClass($localResource);
 
         if ($localResource instanceof Proxy) {
@@ -78,9 +78,16 @@ class CustomerSyncer extends AbstractSyncer
                     break;
 
                 case 'defaultSource':
-                    $reflectedProperty->setValue($localResource, $stripeResource->default_source);
+                    if (!$localResource->getSca()) {
+                        $reflectedProperty->setValue($localResource, $stripeResource->default_source);
+                    }
+                    
                     break;
-
+                case 'defaultPaymentMethod':
+                    if ($localResource->getSca()) {
+                        $reflectedProperty->setValue($localResource, $stripeResource->invoice_settings->default_payment_method);
+                    }
+                    break;
                 case 'delinquent':
                     $reflectedProperty->setValue($localResource, $stripeResource->delinquent);
                     break;
@@ -124,15 +131,24 @@ class CustomerSyncer extends AbstractSyncer
          *
          * The cancellation process of a card is handled differently and does not concerns this updating process.
          */
+        if (!$localResource->getSca()) {
+            $payment_method = \Stripe\PaymentMethod::retrieve($stripeResource->default_source);
+        } else {
+            $payment_method = \Stripe\PaymentMethod::retrieve($stripeResource->invoice_settings->default_payment_method);
+        }
+        
         try {
-            $stripeDefaultCard = $stripeResource->sources->retrieve($stripeResource->default_source);
+            if (!$localResource->getSca()) {
+                $stripeDefaultCard = $stripeResource->sources->retrieve($stripeResource->default_source);
+            } else {
+                $stripeDefaultCard = $payment_method;
+            }
         } catch (Base $e) {
             // If an error occurs, simply flush the Customer object
             $this->getEntityManager()->flush();
 
             return;
         }
-
         $localCard = $this->getEntityManager()->getRepository('SHQStripeBundle:StripeLocalCard')->findOneByStripeId($stripeDefaultCard->id);
 
         // Chek if the card exists
@@ -151,9 +167,11 @@ class CustomerSyncer extends AbstractSyncer
         $this->getEntityManager()->persist($localCard);
 
         // Now set the Card as default source of the StripeLocalCustomer object
-        $defaultSourceProperty = $reflect->getProperty('defaultSource');
-        $defaultSourceProperty->setAccessible(true);
-        $defaultSourceProperty->setValue($localResource, $localCard);
+        if (!$localResource->getSca()) {
+            $defaultSourceProperty = $reflect->getProperty('defaultSource');
+            $defaultSourceProperty->setAccessible(true);
+            $defaultSourceProperty->setValue($localResource, $localCard);
+        }
 
         $this->getEntityManager()->persist($localResource);
         $this->getEntityManager()->flush();
@@ -183,7 +201,7 @@ class CustomerSyncer extends AbstractSyncer
         }
 
         if (null !== $localResource->getNewSource()) {
-            $stripeResource->payment_method = $localResource->getNewSource();
+            $stripeResource->source = $localResource->getNewSource();
         }
 
         if (null !== $localResource->getDescription()) {

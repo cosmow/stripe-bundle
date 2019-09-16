@@ -114,13 +114,14 @@ class StripeLocalCharge implements StripeLocalResourceInterface
     private $receiptNumber;
 
     /**
-     * @var StripeLocalCard For most Stripe users, the source of every charge is a credit or debit card.
+     * @var StripeLocalCard|null For most Stripe users, the source of every charge is a credit or debit card.
      *                      This hash is then the card object describing that card. There are some checks to
      *                      create a charge
      *
      * @see toStripeArray()
      */
     private $source;
+    
 
     /** @var string $statementDescriptor Extra information about a charge. This will appear on your customer’s credit card statement. */
     private $statementDescriptor;

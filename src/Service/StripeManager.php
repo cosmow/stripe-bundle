@@ -39,6 +39,7 @@ use Stripe\Event;
 use Stripe\Plan;
 use Stripe\Stripe;
 use Stripe\Subscription;
+use Stripe\PaymentIntent;
 
 /**
  * Manages the Stripe's API calls.
@@ -337,7 +338,7 @@ class StripeManager
     public function createCharge(StripeLocalCharge $localCharge)
     {
         // Get the object as an array
-        $params = $localCharge->toStripe('create');
+        $params = $localCharge->toStripe('create');  //Continuar con el cargo si es PaymentMethod
 
         // If the statement descriptor is not set and the default one is not null...
         if (false === isset($params['statement_descriptor']) && false === is_null($this->statementDescriptor)) {

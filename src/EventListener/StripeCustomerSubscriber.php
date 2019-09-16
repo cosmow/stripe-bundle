@@ -51,6 +51,7 @@ class StripeCustomerSubscriber extends AbstractStripeSubscriber
         $currency = $localCustomer->getCurrency();
 
         $result = $this->getStripeManager()->createCustomer($localCustomer);
+        
 
         // Check if something went wrong
         if (false === $result) {

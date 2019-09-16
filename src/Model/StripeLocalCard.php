@@ -501,7 +501,7 @@ class StripeLocalCard implements StripeLocalResourceInterface
      */
     public function getFormattedLast4Digits() : string
     {
-        return '**** **** ** ******' . $this->last4;
+        return '**** **** **** ' . $this->last4;
     }
 
     public function getAllInfo() {

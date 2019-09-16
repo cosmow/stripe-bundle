@@ -70,14 +70,27 @@ class StripeLocalCustomer implements StripeLocalResourceInterface
     /** @var string $newSource Used to create a new source for the customer */
     private $newSource;
 
+    /** @var ArrayCollection $paymentMethods */
+    private $paymentMethods;
+
+    /** @var StripeLocalPaymentMethod|null $defaultPaymentMethod ID of the default payment method attached to this customer. */
+    private $defaultPaymentMethod;
+
+    /** @var bool Used to identify users under Strong Customer Authentication */
+    private $sca;
+
+    /** @var string $newPaymentMethod Used to create a new payment method for customer */
+    private $newPaymentMethod;
+
     /**
      * Initializes the collections.
      */
     public function __construct()
     {
-        $this->charges       = new ArrayCollection();
-        $this->subscriptions = new ArrayCollection();
-        $this->cards         = new ArrayCollection();
+        $this->charges        = new ArrayCollection();
+        $this->subscriptions  = new ArrayCollection();
+        $this->cards          = new ArrayCollection();
+        $this->paymentMethods = new ArrayCollection();
     }
 
     /**
@@ -371,11 +384,12 @@ class StripeLocalCustomer implements StripeLocalResourceInterface
             $return['metadata'] = $this->getMetadata();
         }
 
-        if (null !== $this->getNewSource() && 'create' === $action) {
-            $return['payment_method'] = $this->getNewSource();
-            $return['invoice_settings'] = [
-                'default_payment_method' => $this->getNewSource()
-            ];
+        if (null !== $this->getNewSource() && 'create' === $action && !$this->getSca()) {
+            $return['source'] = $this->getNewSource();
+            
+        } else if ($this->getNewPaymentMethod() && 'create' === $action && $this->getSca()) {
+            $return['payment_method'] = $this->getNewPaymentMethod();
+            $return['invoice_settings'] = ['default_payment_method' => $this->getNewPaymentMethod()];
         }
 
         return $return;
@@ -397,10 +411,55 @@ class StripeLocalCustomer implements StripeLocalResourceInterface
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getPaymentMethods()
+    {
+        return $this->paymentMethods;
+    }
+
+    /**
      * @return string
      */
     public function __toString()
     {
         return $this->getId();
     }
+
+    /**
+     * @return bool
+     */
+    public function getSca()
+    {
+        return $this->sca;
+    }
+
+    /**
+     * @return StripeLocalCustomer
+     */
+    public function setSca($sca)
+    {
+        $this->sca = $sca;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getNewPaymentMethod()
+    {
+        return $this->newPaymentMethod;
+    }
+
+    /**
+     * @return StripeLocalCustomer
+     */
+    public function setNewPaymentMethod($newPaymentMethod)
+    {
+        $this->newPaymentMethod = $newPaymentMethod;
+
+        return $this;
+    }
+
 }
