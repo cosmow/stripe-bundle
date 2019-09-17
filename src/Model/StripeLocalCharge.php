@@ -131,6 +131,18 @@ class StripeLocalCharge implements StripeLocalResourceInterface
 
     /** @var bool $toCapture Defines if the charge has to be immediately captured or not. Use capture() or notCapture() to set this on or off. */
     private $capture = true;
+    
+    /** @var string $redirectToUrl Used for SCA payment if require action needed */
+    private $redirectToUrl;
+
+     /** @var string $callbackUrl Used indicate to Stripe where should redirect to check the payment */
+     private $callbackUrl;
+
+    /** @var string $type PaymentIntent or Charge */
+    private $type;
+
+    /** @var string $type secret key to validate the transaction */
+    private $clientSecret;
 
     /**
      * @return int
@@ -266,6 +278,14 @@ class StripeLocalCharge implements StripeLocalResourceInterface
     public function getStatus(): bool
     {
         return $this->status;
+    }
+
+    /**
+     * @return StripeLocalCharge
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 
     /**
@@ -448,18 +468,24 @@ class StripeLocalCharge implements StripeLocalResourceInterface
             $return = [
                 'amount'   => $this->getAmount()->getBaseAmount(),
                 'currency' => $this->getAmount()->getCurrency()->getCode(),
-
-                /*
-                 * capture, optional, default is true.
-                 *
-                 * Whether or not to immediately capture the charge. When false, the charge issues an authorization (or
-                 * pre-authorization), and will need to be captured later. Uncaptured charges expire in 7 days. For more
-                 * information, see authorizing charges and settling later.
-                 *
-                 * @see https://stripe.com/docs/api/php#create_charge-capture
-                 */
-                'capture' => $this->capture,
                 ];
+            /*
+            * capture, optional, default is true.
+            *
+            * Whether or not to immediately capture the charge. When false, the charge issues an authorization (or
+            * pre-authorization), and will need to be captured later. Uncaptured charges expire in 7 days. For more
+            * information, see authorizing charges and settling later.
+            *
+            * @see https://stripe.com/docs/api/php#create_charge-capture
+            */
+            if(!$this->getCustomer()->isSca()) {
+                $return['capture'] = $this->capture;
+            } else {
+                $return['payment_method_types'] = ['card'];
+                $return['confirm'] = true;
+                $return['payment_method'] = $this->getCustomer()->getNewPaymentMethod() ?? $this->getCustomer()->getDefaultSource()->getId();
+                $return['return_url'] = $this->getCallbackUrl();
+            }
 
             if (null !== $this->getDescription()) {
                 $return['description'] = $this->getDescription();
@@ -529,7 +555,80 @@ class StripeLocalCharge implements StripeLocalResourceInterface
     /**
      * String representing the entity
      */
-    public function __toString() : string {
+    public function __toString() : string 
+    {
         return $this->id;
+    }
+
+    /**
+     * @return String
+     */
+    public function getRedirectToUrl()
+    {
+        return $this->redirectToUrl;
+    }
+
+    /**
+     * @return StripeLocalCharge
+     */
+    public function setRedirectToUrl($redirectToUrl)
+    {
+        $this->redirectToUrl = $redirectToUrl;
+
+        return $this;
+    }
+
+    /**
+     * @return String
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return StripeLocalCharge
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return String
+     */
+    public function getCallbackUrl()
+    {
+        return $this->callbackUrl;
+    }
+
+    /**
+     * @return StripeLocalCharge
+     */
+    public function setCallbackUrl($callbackUrl)
+    {
+        $this->callbackUrl = $callbackUrl;
+
+        return $this;
+    }
+
+    /**
+     * @return String
+     */
+    public function getClientSecret()
+    {
+        return $this->clientSecret;
+    }
+
+    /**
+     * @return StripeLocalCharge
+     */
+    public function setClientSecret($clientSecret)
+    {
+        $this->clientSecret = $clientSecret;
+
+        return $this;
     }
 }

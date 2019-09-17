@@ -351,8 +351,13 @@ class StripeManager
             'options' => [],
         ];
 
-        $stripeCharge = $this->callStripeApi(Charge::class, 'create', $arguments);
-
+        // Stripe charge or payment intent, depends on SCA
+        if (!$localCharge->getCustomer()->getSca()) {
+            $stripeCharge = $this->callStripeApi(Charge::class, 'create', $arguments);
+        } else {
+            $stripeCharge = $this->callStripeApi(PaymentIntent::class, 'create', $arguments);
+        }
+        
         // If the creation failed...
         if (false === $stripeCharge) {
             // ... Check if it was due to a fraudulent detection

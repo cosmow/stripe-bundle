@@ -46,7 +46,7 @@ class CardSyncer extends AbstractSyncer
         }
         $isSca = $stripeResource instanceof PaymentMethod;
         $reflect = new \ReflectionClass($localResource);
-        dump($localResource, $stripeResource);die;
+
         foreach ($reflect->getProperties() as $reflectedProperty) {
             // Set the property as accessible
             $reflectedProperty->setAccessible(true);
@@ -60,7 +60,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'addressCity':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->address_city);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->billing_details->address->city);
@@ -68,7 +68,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'addressCountry':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->address_country);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->billing_details->address->country);
@@ -76,7 +76,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'addressLine1':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->address_line1);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->billing_details->address->line1);
@@ -84,7 +84,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'addressLine1Check':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->address_line1_check);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->card->checks->address_line1_check);
@@ -92,7 +92,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'addressLine2':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->address_line2);
                     } else {
                         $reflectedProperty->setValue($localResource, null);
@@ -100,7 +100,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'addressState':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->address_state);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->billing_details->address->state);
@@ -108,7 +108,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'addressZip':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->address_zip);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->billing_details->address->postal_code);
@@ -116,7 +116,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'addressZipCheck':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->address_zip_check);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->card->checks->address_postal_code_check);
@@ -124,7 +124,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'brand':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->brand);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->card->brand);
@@ -132,7 +132,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'country':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->country);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->card->country);
@@ -148,7 +148,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'cvcCheck':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->cvc_check);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->card->checks->cvc_check);
@@ -156,7 +156,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'dynamicLast4':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->dynamic_last4);
                     } else {
                         $reflectedProperty->setValue($localResource, null);
@@ -164,7 +164,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'expMonth':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->exp_month);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->card->exp_month);
@@ -172,7 +172,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'expYear':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->exp_year);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->card->exp_year);
@@ -180,7 +180,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'fingerprint':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->fingerprint);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->card->fingerprint);
@@ -188,7 +188,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'funding':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->funding);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->card->funding);
@@ -196,7 +196,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'last4':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->last4);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->card->last4);
@@ -208,7 +208,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'name':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->name);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->billing_details->name);
@@ -216,7 +216,7 @@ class CardSyncer extends AbstractSyncer
                     break;
 
                 case 'tokenizationMethod':
-                    if(!isSca()) {
+                    if(!$isSca) {
                         $reflectedProperty->setValue($localResource, $stripeResource->tokenization_method);
                     } else {
                         $reflectedProperty->setValue($localResource, null);
