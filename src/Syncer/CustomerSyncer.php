@@ -81,12 +81,6 @@ class CustomerSyncer extends AbstractSyncer
                     if (!$localResource->getSca()) {
                         $reflectedProperty->setValue($localResource, $stripeResource->default_source);
                     }
-                    
-                    break;
-                case 'defaultPaymentMethod':
-                    if ($localResource->getSca()) {
-                        $reflectedProperty->setValue($localResource, $stripeResource->invoice_settings->default_payment_method);
-                    }
                     break;
                 case 'delinquent':
                     $reflectedProperty->setValue($localResource, $stripeResource->delinquent);
@@ -167,11 +161,11 @@ class CustomerSyncer extends AbstractSyncer
         $this->getEntityManager()->persist($localCard);
 
         // Now set the Card as default source of the StripeLocalCustomer object
-        if (!$localResource->getSca()) {
-            $defaultSourceProperty = $reflect->getProperty('defaultSource');
-            $defaultSourceProperty->setAccessible(true);
-            $defaultSourceProperty->setValue($localResource, $localCard);
-        }
+        
+        $defaultSourceProperty = $reflect->getProperty('defaultSource');
+        $defaultSourceProperty->setAccessible(true);
+        $defaultSourceProperty->setValue($localResource, $localCard);
+        
 
         $this->getEntityManager()->persist($localResource);
         $this->getEntityManager()->flush();

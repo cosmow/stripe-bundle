@@ -273,9 +273,9 @@ class StripeLocalCharge implements StripeLocalResourceInterface
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function getStatus(): bool
+    public function getStatus()
     {
         return $this->status;
     }
@@ -540,7 +540,7 @@ class StripeLocalCharge implements StripeLocalResourceInterface
              *
              * @see https://stripe.com/docs/api/php#create_charge-source
              */
-            if (null !== $this->getSource()) {
+            if (null !== $this->getSource() && !$this->getCustomer()->getSca()) {
                 $return['source'] = $this->getSource();
             }
 
