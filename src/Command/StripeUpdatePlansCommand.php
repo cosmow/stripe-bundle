@@ -42,9 +42,10 @@ class StripeUpdatePlansCommand extends DoctrineCommand
 
         $stripeManager = $this->getContainer()->get('stripe_bundle.manager.stripe_api');
         $stripePlans   = $stripeManager->retrievePlans();
+        
         //var_dump($stripePlans);die;
         foreach ($stripePlans['data'] as $plan) {
-            $aPlan = $plan->__toArray();
+            $aPlan = $plan->toArray();
 
             $stripeLocalPlan = $em
                 ->getRepository('SerendipityHQ\\Bundle\\StripeBundle\\Model\\StripeLocalPlan')
@@ -63,8 +64,7 @@ class StripeUpdatePlansCommand extends DoctrineCommand
                 ->setIntervalCount($aPlan['interval_count'])
                 ->setLivemode($aPlan['livemode'])
                 ->setMetadata($aPlan['metadata'])
-                ->setName($aPlan['name'])
-                ->setStatementDescriptor($aPlan['statement_descriptor'])
+                ->setName($aPlan['nickname'])
                 ->setTrialPeriodDays($aPlan['trial_period_days']);
             $planUpdateEvent = new StripePlanUpdateEvent($stripeLocalPlan);
             $this->getContainer()->get('event_dispatcher')->dispatch(

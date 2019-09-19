@@ -23,7 +23,7 @@
         <field name="trialEnd" type="datetime" column="trial_end" nullable="true" />
         <field name="trialStart" type="datetime" column="trial_start" nullable="true" />
         <field name="paymentErrors" type="integer" column="payment_errors" nullable="false" default="0" />
-
+        <field name="latestInvoice" type="string" column="latest_invoice" nullable="true" />
         <many-to-one field="customer" target-entity="SerendipityHQ\Bundle\StripeBundle\Model\StripeLocalCustomer" inversed-by="subscriptions">
             <join-column name="customer" referenced-column-name="id" />
         </many-to-one>

@@ -197,6 +197,11 @@ class StripeLocalSubscription implements StripeLocalResourceInterface
     private $paymentErrors = 0;
 
     /**
+     * @var string
+     */
+    private $latestInvoice;
+
+    /**
      * @return int
      */
     public function getId()
@@ -458,7 +463,7 @@ class StripeLocalSubscription implements StripeLocalResourceInterface
      */
     public function toStripe($action)
     {
-        $return = [];
+        $return = ['payment_behavior' => 'allow_incomplete'];
 
         // Prepare the array for creation
         if ('create' === $action) {
@@ -476,7 +481,14 @@ class StripeLocalSubscription implements StripeLocalResourceInterface
                 throw new \InvalidArgumentException('To create a Charge you need to set an Customer.');
             }
 
-            $return = [];
+            /*
+             * SCA default paymentMethod/default source
+             */
+            if ($this->getCustomer()->isSca()) {
+                $return['default_payment_method'] = $this->getCustomer()->getDefaultSource()->getId();
+            } else {
+                $return['default_souce'] = $this->getCustomer()->getDefaultSource()->getId();
+            }
 
             /*
              * customer required
@@ -662,5 +674,26 @@ class StripeLocalSubscription implements StripeLocalResourceInterface
     public function getPaymentErrors()
     {
         return $this->paymentErrors;
+    }
+
+    /**
+     * @param string $latestInvoice
+     *
+     * @return StripeLocalSubscription
+     */
+    public function setLatestInvoice($latestInvoice)
+    {
+        $this->latestInvoice = $latestInvoice;
+
+        return $this;
+    }
+
+    /**
+     
+     * @return string
+     */
+    public function getLatestInvoice()
+    {
+        return $this->latestInvoice;
     }
 }

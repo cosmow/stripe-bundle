@@ -83,11 +83,11 @@ class PlanSyncer extends AbstractSyncer
                     break;
 
                 case 'name':
-                    $reflectedProperty->setValue($localResource, $stripeResource->name);
+                    $reflectedProperty->setValue($localResource, $stripeResource->nickname);
                     break;
 
                 case 'statementDescriptor':
-                    $reflectedProperty->setValue($localResource, $stripeResource->statement_descriptor);
+                    $reflectedProperty->setValue($localResource, null);
                     break;
 
                 case 'trialPeriodDays':

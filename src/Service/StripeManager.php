@@ -357,7 +357,7 @@ class StripeManager
         } else {
             $stripeCharge = $this->callStripeApi(PaymentIntent::class, 'create', $arguments);
         }
-        
+
         // If the creation failed...
         if (false === $stripeCharge) {
             // ... Check if it was due to a fraudulent detection
@@ -548,7 +548,7 @@ class StripeManager
     public function retrievePlans()
     {
         // Return the all plans
-        return $this->callStripeApi(Plan::class, 'all', ['limit' => 100]);
+        return $this->callStripeApi(Plan::class, 'all', ['options' => ['limit' => 100]]);
     }
 
     /**
