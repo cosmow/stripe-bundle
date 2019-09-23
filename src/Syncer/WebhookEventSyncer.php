@@ -126,9 +126,10 @@ class WebhookEventSyncer extends AbstractSyncer
                 if (null === $localSubscription) {
                     $localSubscription = new StripeLocalSubscription();
                 }
-
+                if($localSubscription->getStatus() != "incomplete") {
+                    $this->getSubscriptionSyncer()->syncLocalFromStripe($localSubscription, $stripeResource->data->object);
+                }
                 // Sync the local object with the remote one
-                $this->getSubscriptionSyncer()->syncLocalFromStripe($localSubscription, $stripeResource->data->object);
                 break;
 
             case 'source':

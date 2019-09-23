@@ -43,7 +43,6 @@ class StripeUpdatePlansCommand extends DoctrineCommand
         $stripeManager = $this->getContainer()->get('stripe_bundle.manager.stripe_api');
         $stripePlans   = $stripeManager->retrievePlans();
         
-        //var_dump($stripePlans);die;
         foreach ($stripePlans['data'] as $plan) {
             $aPlan = $plan->toArray();
 

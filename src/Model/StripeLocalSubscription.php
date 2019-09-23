@@ -611,13 +611,13 @@ class StripeLocalSubscription implements StripeLocalResourceInterface
              *
              * @see https://stripe.com/docs/api#cancel_subscription-at_period_end
              */     
-             if (null !== $this->isCancelAtPeriodEnd()) {
+             /* if (null !== $this->isCancelAtPeriodEnd()) {
                 $return['at_period_end'] = $this->isCancelAtPeriodEnd();
             }elseif('update' === $action){
                 if (null !== $this->isCancelAtPeriodEnd()) {
                     $return['cancel_at_period_end'] = $this->isCancelAtPeriodEnd();            
                 }
-            }
+            } */
         }
 
         return $return;
