@@ -126,7 +126,7 @@ class CustomerSyncer extends AbstractSyncer
          * The cancellation process of a card is handled differently and does not concerns this updating process.
          */
         if (!$localResource->getSca()) {
-            $payment_method = \Stripe\PaymentMethod::retrieve($stripeResource->default_source);
+            $payment_method = \Stripe\Card::retrieve($stripeResource->default_source);
         } else {
             $payment_method = \Stripe\PaymentMethod::retrieve($stripeResource->invoice_settings->default_payment_method);
         }
@@ -208,6 +208,9 @@ class CustomerSyncer extends AbstractSyncer
 
         if (null !== $localResource->getAccountBalance()) {
             $stripeResource->metadata = $localResource->getMetadata();
+        }
+        if (null !== $localResource->getNewPaymentMethod() && $localResource->getSca()) {
+            $stripeResource->invoice_settings->default_payment_method = $localResource->getNewPaymentMethod();
         }
     }
 

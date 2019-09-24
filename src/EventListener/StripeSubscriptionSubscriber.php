@@ -17,6 +17,7 @@ namespace SerendipityHQ\Bundle\StripeBundle\EventListener;
 
 use SerendipityHQ\Bundle\StripeBundle\Event\StripeSubscriptionCancelEvent;
 use SerendipityHQ\Bundle\StripeBundle\Event\StripeSubscriptionUpdateEvent;
+use SerendipityHQ\Bundle\StripeBundle\Event\StripeSubscriptionDeleteEvent;
 use SerendipityHQ\Bundle\StripeBundle\Event\StripeSubscriptionCreateEvent;
 use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -35,6 +36,7 @@ class StripeSubscriptionSubscriber extends AbstractStripeSubscriber
             StripeSubscriptionCreateEvent::CREATE => 'onSubscriptionCreate',
             StripeSubscriptionUpdateEvent::UPDATE => 'onSubscriptionUpdate',
             StripeSubscriptionCancelEvent::CANCEL => 'onSubscriptionCancel',
+            StripeSubscriptionDeleteEvent::DELETED => 'onSubscriptionDeleted',
         ];
     }
 
@@ -104,6 +106,37 @@ class StripeSubscriptionSubscriber extends AbstractStripeSubscriber
      * @param ContainerAwareEventDispatcher|EventDispatcherInterface $dispatcher
      */
     public function onSubscriptionUpdate(StripeSubscriptionUpdateEvent $event, $eventName, EventDispatcherInterface $dispatcher)
+    {
+        //TODO
+        /* $localSubscription = $event->getLocalSubscription();
+
+        $localSubscription->setCancelAtPeriodEnd(true);
+
+        $result = $this->getStripeManager()->cancelSubscription($localSubscription, true);
+
+        // Check if something went wrong
+        if (false === $result) {
+            // Stop progation
+            $event->setStopReason($this->getStripeManager()->getError())->stopPropagation();
+
+            // Dispatch a failed event
+            $dispatcher->dispatch(StripeSubscriptionCancelEvent::FAILED, $event);
+
+            // exit
+            return;
+        }
+
+        $dispatcher->dispatch(StripeSubscriptionCancelEvent::CANCELED, $event); */
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param StripeSubscriptionCancelEvent $event
+     * @param $eventName
+     * @param ContainerAwareEventDispatcher|EventDispatcherInterface $dispatcher
+     */
+    public function onSubscriptionDeleted(StripeSubscriptionDeleteEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         //TODO
         /* $localSubscription = $event->getLocalSubscription();
