@@ -49,7 +49,6 @@ class ChargeSyncer extends AbstractSyncer
         }
 
         $reflect = new \ReflectionClass($localResource);
-        
         foreach ($reflect->getProperties() as $reflectedProperty) {
             // Set the property as accessible
             $reflectedProperty->setAccessible(true);
@@ -127,7 +126,7 @@ class ChargeSyncer extends AbstractSyncer
                     break;
 
                 case 'paid':
-                    if (!$localResource->getCustomer()->getSca()) {
+                    if (isset($stripeResource->paid)) {
                         $reflectedProperty->setValue($localResource, $stripeResource->paid);
                     } else {
                         $reflectedProperty->setValue($localResource, $stripeResource->status == "success");
@@ -177,7 +176,7 @@ class ChargeSyncer extends AbstractSyncer
         $this->getEntityManager()->persist($localResource);
 
         // Out of the foreach, process the source to associate to the charge.
-        if (!$localResource->getCustomer()->getSca()) {
+        if (isset($stripeResource->source)) {
             $localCard = $this->getEntityManager()->getRepository('SHQStripeBundle:StripeLocalCard')->findOneByStripeId($stripeResource->source->id);
         } else {
             $localCard = $this->getEntityManager()->getRepository('SHQStripeBundle:StripeLocalCard')->findOneByStripeId($stripeResource->payment_method);
@@ -190,7 +189,7 @@ class ChargeSyncer extends AbstractSyncer
         }
 
         // Sync the local card with the remote object
-        if (!$localResource->getCustomer()->getSca()) {
+        if (isset($stripeResource->source)) {
             $this->getCardSyncer()->syncLocalFromStripe($localCard, $stripeResource->source);
         } else {
             $paymentMethod = \Stripe\PaymentMethod::retrieve($stripeResource->payment_method);

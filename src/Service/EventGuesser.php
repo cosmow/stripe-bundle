@@ -135,6 +135,10 @@ class EventGuesser
 
             case 'invoice':
                 $disptachingEvent = new StripeWebhookInvoiceEventEvent($localEventEntity);
+                
+                if (!defined(StripeWebhookInvoiceItemEventEvent::class . '::' . $pieces['type'])){
+                    die('OK, no definido');
+                }
 
                 return [
                     'type'   => constant(StripeWebhookInvoiceEventEvent::class . '::' . $pieces['type']),
@@ -242,10 +246,11 @@ class EventGuesser
                 break;
 
             default:
+                die("Evento no soportado.");
                 if ($this->debug) {
                     throw new \RuntimeException('Event type not recognized. Maybe it is a new one or is not yet supported by the bundle. Report this issue to the GitHub Issue tracker.');
                 }
-
+            
                 return ['type' => null, 'object' => null];
         }
     }
