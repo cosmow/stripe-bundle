@@ -15,7 +15,8 @@
 
 namespace SerendipityHQ\Bundle\StripeBundle\Syncer;
 
-use Doctrine\Common\Persistence\Proxy;
+#use Doctrine\Common\Persistence\Proxy; #Eliminado en symfony4
+use Doctrine\Common\Proxy\Proxy;
 use SerendipityHQ\Bundle\StripeBundle\Model\StripeLocalCard;
 use SerendipityHQ\Bundle\StripeBundle\Model\StripeLocalCustomer;
 use SerendipityHQ\Bundle\StripeBundle\Model\StripeLocalResourceInterface;
