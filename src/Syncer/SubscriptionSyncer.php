@@ -57,11 +57,13 @@ class SubscriptionSyncer extends AbstractSyncer
                     break;
 
                 case 'cancelAtPeriodEnd':
-                    $reflectedProperty->setValue($localResource, $stripeResource->cancel_at_period_at);
+                    $cancelAtPeriodAt = new \DateTime();
+                    $reflectedProperty->setValue($localResource, $cancelAtPeriodAt->setTimestamp($stripeResource->cancel_at_period_at));
                     break;
 
                 case 'canceledAt':
-                    $reflectedProperty->setValue($localResource, $stripeResource->canceled_at);
+                    $canceledAt = new \DateTime();
+                    $reflectedProperty->setValue($localResource, $canceledAt->setTimestamp($stripeResource->canceled_at));
                     break;
 
                 case 'created':
