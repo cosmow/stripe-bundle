@@ -66,8 +66,7 @@ class SHQStripeBundle extends Bundle
         return DoctrineOrmMappingsPass::createXmlMappingDriver(
             $mappings,
             ['stripe_bundle.model_manager_name'],
-            'stripe_bundle.backend_orm',
-            ['SHQStripeBundle' => 'SerendipityHQ\Bundle\StripeBundle\Model']
+            'stripe_bundle.backend_orm'
         );
     }
 }
